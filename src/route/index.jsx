@@ -7,6 +7,11 @@ import Register from "../pages/Register";
 import ForgotPassword from "../pages/ForgotPassword";
 import OtpVerification from "../pages/OtpVerification";
 import ResetPassword from "../pages/ResetPassword";
+import UserMenuMobile from "../pages/UserMenuMobile";
+import Dashboard from "../layouts/Dashboard";
+import Profile from "../pages/Profile";
+import MyOrders from "../pages/MyOrders";
+import Addresses from "../pages/Addresses";
 
 const router = createBrowserRouter([
     {
@@ -40,7 +45,30 @@ const router = createBrowserRouter([
             {
                 path : "reset-password",
                 element : <ResetPassword/>
-            }
+            },
+
+            {
+                path : "user",
+                element : <UserMenuMobile/>
+            },
+            {
+                path : "dashboard",
+                element : <Dashboard/>,
+                children : [
+                    {
+                        path : "profile",
+                        element : <Profile/>
+                    },
+                    {
+                        path : "myorders",
+                        element : <MyOrders/>
+                    },
+                    {
+                        path : "address",
+                        element : <Addresses/>
+                    }
+                ]
+            },
         ]
     }
 ])

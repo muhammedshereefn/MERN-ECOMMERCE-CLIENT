@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from '../assets/logooo.png'
 import Search from './Search'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FaRegCircleUser } from "react-icons/fa6";
 import useMobile from '../hooks/useMobile';
 import { BsCart4 } from "react-icons/bs";
+import { useSelector } from 'react-redux';
+import { VscTriangleDown, VscTriangleUp } from "react-icons/vsc";
+import UserMenu from './UserMenu';
 
 
 const Header = () => {
@@ -12,9 +15,24 @@ const Header = () => {
   const location = useLocation()
   const isSearchPage = location.pathname === '/search'
   const navigate = useNavigate()
+  const user = useSelector((state)=> state?.user)
+  const [openUserMenu, setOpenUserMenu] = useState(false)
 
+
+  const handleCloseUserMenu =()=>{
+    setOpenUserMenu(false)
+  }
+  
   const redirectedToLoginPage = () => {
     navigate("/login")
+  }
+
+  const handleMobileUser =()=>{
+    if(!user._id){
+      navigate("/login")
+      return
+    }
+    navigate("/user")
   }
   
 
@@ -50,11 +68,41 @@ const Header = () => {
    
            {/* login and my cart */}
                <div>
-                   <button className='text-neutral-500 lg:hidden'>
+                   <button className='text-neutral-500 lg:hidden' onClick={handleMobileUser}>
                    <FaRegCircleUser size={26} />
                    </button>
                    <div className='hidden lg:flex  items-center gap-10'>
-                        <button onClick={redirectedToLoginPage} className='text-lg px-2'>Login</button>
+                       {
+                        user?._id ?  (
+                          <div className='relative'>
+                            <div onClick={()=> setOpenUserMenu(preve => !preve)} className='flex select-none items-center gap-1 cursor-pointer'>
+                              <p>Account</p>
+                              {
+                                openUserMenu ? (
+                                   <VscTriangleUp size={20}/> 
+                                ) : (
+                                  <VscTriangleDown size={20}/>
+                                )
+                              }
+                              
+                            
+                            </div>
+                            {
+                              openUserMenu && (
+                                <div className='absolute right-0 top-12 '>
+                              <div className=' bg-white rounded p-4 min-w-52 lg:shadow-lg'>
+                                 <UserMenu close={setOpenUserMenu}/>
+                              </div>
+                            </div>
+                              )
+                            }
+                            
+                          </div>
+                        ) : (
+                          <button onClick={redirectedToLoginPage} className='text-lg px-2'>Login</button>
+                        )
+                       }
+                        
                         <button className='flex items-center gap-2 bg-green-800 hover:bg-green-700 px-3 py-3 rounded text-white'>
                           <div className='animate-bounce'>
                           <BsCart4 size={26}/>
