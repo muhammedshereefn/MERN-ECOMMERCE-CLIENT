@@ -45,6 +45,8 @@ const Profile = () => {
       })
     }
 
+    console.log("hi");
+    
 
     const hadleSubmit = async (e)=> {
       e.preventDefault()
